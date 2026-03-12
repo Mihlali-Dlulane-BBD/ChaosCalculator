@@ -44,9 +44,24 @@ namespace ChaosCalculator.Components.Pages
 
         private void ShuffleKeypad()
         {
-            var shuffleIndices = keypadLayout.Select((k, i) => new { k, i }).Where(x => x.k.Type != KeyType.Zero).ToList();
-            var shuffledItems = shuffleIndices.Select(x => x.k).OrderBy(x => Random.Shared.Next()).ToList();
-            for (int i = 0; i < shuffleIndices.Count; i++) keypadLayout[shuffleIndices[i].i] = shuffledItems[i];
+            var movableIndices = new List<int>();
+            var buttonsToShuffle = new List<KeyInfo>();
+            for (int i = 0; i < keypadLayout.Count; i++)
+            {
+     
+                if (keypadLayout[i].Type != KeyType.Zero)
+                {
+                    movableIndices.Add(i);
+                    buttonsToShuffle.Add(keypadLayout[i]);
+                }
+            }
+            var scrambledButtons = buttonsToShuffle.OrderBy(_ => Random.Shared.Next()).ToList();
+
+            for (int i = 0; i < movableIndices.Count; i++)
+            {
+                int targetIndex = movableIndices[i];
+                keypadLayout[targetIndex] = scrambledButtons[i];
+            }
         }
 
         private string GetButtonClass(KeyInfo key) => key.Type switch
