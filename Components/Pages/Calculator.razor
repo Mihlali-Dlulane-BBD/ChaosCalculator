@@ -1,0 +1,39 @@
+﻿@page "/"
+@using System.Data
+@rendermode InteractiveServer
+
+<PageTitle>Chaos Calculator</PageTitle>
+
+<main>
+    <div class="calculator-app"
+         data-theme="@currentTheme"
+         tabindex="0"
+         @ref="calculatorWrapper"
+         @onkeydown="HandleKeyDown">
+
+        <div class="calc-wrapper">
+        
+            <div class="toolbar">
+                <button class="icon-btn" @onclick="ShuffleKeypad" title="Scramble Keypad">🔀</button>
+                <button class="icon-btn" @onclick="ToggleTheme" title="Switch Theme">
+                    @(currentTheme == "dark" ? "☀️" : "🌙")
+                </button>
+            </div>
+
+            <div class="calc-display">
+                <div class="equation">@equationString</div>
+                <div class="result">@currentDisplay</div>
+            </div>
+
+            <div class="keypad">
+                @foreach (var key in keypadLayout)
+                {
+                    <button class="calc-btn @GetButtonClass(key)" @onclick="() => OnKeyPress(key)">
+                        @key.Label
+                    </button>
+                }
+            </div>
+        
+        </div>
+    </div>
+</main>
